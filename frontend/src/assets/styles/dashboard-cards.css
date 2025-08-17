@@ -1,0 +1,205 @@
+.details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+    margin: 20px 0;
+    padding: 0 10px;
+}
+
+.dashboard-card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(226, 232, 240, 0.7);
+}
+
+.dashboard-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+}
+
+.card-content {
+    display: flex;
+    align-items: flex-start;
+    position: relative;
+    z-index: 1;
+}
+
+.card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 16px;
+    flex-shrink: 0;
+}
+
+.emoji-icon {
+    font-size: 1.5rem;
+    display: inline-block;
+    transition: transform 0.2s ease;
+}
+
+.card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    width: 48px;
+    height: 48px;
+    margin-right: 16px;
+    flex-shrink: 0;
+}
+
+.card-icon.income {
+    background-color: #d1fae5;
+}
+
+.card-icon.income .emoji-icon {
+    color: #10b981;
+}
+
+.card-icon.expense {
+    background-color: #fee2e2;
+}
+
+.card-icon.expense .emoji-icon {
+    color: #ef4444;
+}
+
+.card-icon.cash {
+    background-color: #dbeafe;
+}
+
+.card-icon.cash .emoji-icon {
+    color: #3b82f6;
+}
+
+.card-icon.transaction {
+    background-color: #ede9fe;
+}
+
+.card-icon.transaction .emoji-icon {
+    color: #8b5cf6;
+}
+
+.dashboard-card:hover .emoji-icon {
+    transform: scale(1.1);
+}
+
+.card-text {
+    flex: 1;
+}
+
+.card-amount {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 4px 0;
+    line-height: 1.2;
+}
+
+.card-title {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #64748b;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Gradient accent borders */
+.dashboard-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    transition: all 0.3s ease;
+}
+
+.dashboard-card:nth-child(1)::before {
+    background: linear-gradient(to bottom, #10b981, #059669);
+}
+
+.dashboard-card:nth-child(2)::before {
+    background: linear-gradient(to bottom, #ef4444, #dc2626);
+}
+
+.dashboard-card:nth-child(3)::before {
+    background: linear-gradient(to bottom, #3b82f6, #2563eb);
+}
+
+.dashboard-card:nth-child(4)::before {
+    background: linear-gradient(to bottom, #8b5cf6, #7c3aed);
+}
+
+/* Hover effects */
+.dashboard-card:hover::before {
+    width: 6px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .details {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .card-amount {
+        font-size: 1.4rem;
+    }
+    
+    .card-title {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .details {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
+    .dashboard-card {
+        padding: 20px;
+    }
+    
+    .card-amount {
+        font-size: 1.3rem;
+    }
+    
+    .card-title {
+        font-size: 0.8rem;
+    }
+    
+    .card-icon {
+        width: 42px;
+        height: 42px;
+    }
+    
+    .card-icon .icon {
+        font-size: 1.3rem;
+    }
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.dashboard-card {
+    animation: fadeIn 0.4s ease-out forwards;
+}
+
+.dashboard-card:nth-child(1) { animation-delay: 0.1s; }
+.dashboard-card:nth-child(2) { animation-delay: 0.2s; }
+.dashboard-card:nth-child(3) { animation-delay: 0.3s; }
+.dashboard-card:nth-child(4) { animation-delay: 0.4s; }

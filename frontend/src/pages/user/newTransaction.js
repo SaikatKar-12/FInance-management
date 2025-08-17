@@ -53,19 +53,14 @@ function NewTransaction() {
             <Header title="New Transaction" />
             <Toaster/>
             {(isFetching) && <Loading />}
-            {(!isFetching && categories.length === 0) && <Info text="No data found!" />}
-            {
-                (!isFetching && categories.length !== 0) && (
-                    <>
-                        <TransactionTypeSelectWrapper
-                            transactionTypes={transactionTypes}
-                            setTransactionType={setTransactionType}
-                            activeTransactionType={activeTransactionType}
-                        />
-                        <TransactionForm categories={filteredCategories} onSubmit={onSubmit} isSaving={isSaving} />
-                    </>
-                )
-            }
+            {!isFetching && categories.length === 0 && <Info text="No data found!" />}
+            {!isFetching && categories.length > 0 && (
+                <TransactionForm 
+                    categories={categories} 
+                    onSubmit={onSubmit} 
+                    isSaving={isSaving} 
+                />
+            )}
         </Container>
     )
 }

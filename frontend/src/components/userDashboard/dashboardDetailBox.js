@@ -1,30 +1,60 @@
-import incomeImg from '../../assets/images/income.png'
-import expenseImg from '../../assets/images/expense.png'
-import cashInHandImg from '../../assets/images/cashInHand.png'
-import transactionImg from '../../assets/images/transaction.png'
+import '../../assets/styles/dashboard-cards.css';
 
 function DashboardDetailBox({ total_income, total_expense, cash_in_hand, no_of_transactions }) {
+    const formatCurrency = (amount) => {
+        return new Intl.NumberFormat('en-IN', {
+            maximumFractionDigits: 2,
+            minimumFractionDigits: 2
+        }).format(amount);
+    };
 
     return (
         <div className='details'>
-            <Box amount={'Rs. ' + total_income} src={incomeImg} title="Income"/>
-            <Box amount={'Rs. ' + total_expense} src={expenseImg} title="Expense"/>
-            <Box amount={'Rs. ' + cash_in_hand} src={cashInHandImg} title="Cash in hand"/>
-            <Box amount={no_of_transactions} src={transactionImg} title="No of transactions"/>
+            <Box 
+                amount={formatCurrency(total_income)} 
+                icon="📥"
+                title="Income"
+                prefix="Rs. "
+                type="income"
+            />
+            <Box 
+                amount={formatCurrency(total_expense)} 
+                icon="📤"
+                title="Expense"
+                prefix="Rs. "
+                type="expense"
+            />
+            <Box 
+                amount={formatCurrency(cash_in_hand)} 
+                icon="💰"
+                title="Cash in Hand"
+                prefix="Rs. "
+                type="cash"
+            />
+            <Box 
+                amount={no_of_transactions} 
+                icon="🔄"
+                title="Transactions"
+                type="transaction"
+            />
         </div>
-    )
+    );
 }
 
-function Box({amount, src, title}) {
+function Box({ amount, icon, title, prefix = '', type }) {
     return (
-        <div>
-            <div>
-                <h2>{amount}</h2>
-                <h4>{title}</h4>
+        <div className="dashboard-card">
+            <div className="card-content">
+                <div className={`card-icon ${type}`}>
+                    <span className="emoji-icon">{icon}</span>
+                </div>
+                <div className="card-text">
+                    <h2 className="card-amount">{prefix}{amount}</h2>
+                    <h4 className="card-title">{title}</h4>
+                </div>
             </div>
-            <img src={src}/>
         </div>
-    )
+    );
 }
 
 export default DashboardDetailBox;

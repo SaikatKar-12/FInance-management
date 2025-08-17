@@ -33,9 +33,9 @@ function Dashboard() {
             {(!isError) && <SelectMonth months={months} onMonthChange={onMonthChange} />}
             
             {/* Excel Export Button */}
-            {(!isError && !isLoading) && (
+            {(!isError && !isLoading && categorySummary?.length > 0) && (
                 <ExcelExportButton 
-                    userEmail={require('../../services/auth.service').default.getCurrentUser().email}
+                    categoryData={categorySummary}
                     currentMonth={currentMonth.id}
                     currentYear={currentMonth.year}
                 />
