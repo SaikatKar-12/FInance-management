@@ -10,7 +10,7 @@ const ExcelExportButton = ({ userEmail, currentMonth, currentYear }) => {
         setMessage('');
         
         try {
-            const response = await axios.post('http://localhost:8080/mywallet/excel/export/monthly/email', {
+            const response = await axios.post('https://finance-management-production.up.railway.app/mywallet/excel/export/monthly/email', {
                 userEmail: userEmail,
                 month: currentMonth,
                 year: currentYear
@@ -33,7 +33,7 @@ const ExcelExportButton = ({ userEmail, currentMonth, currentYear }) => {
         setMessage('');
         
         try {
-            const response = await axios.get('http://localhost:8080/mywallet/excel/download/monthly', {
+            const response = await axios.get('https://finance-management-production.up.railway.app/mywallet/excel/download/monthly', {
                 params: {
                     userEmail: userEmail,
                     month: currentMonth,

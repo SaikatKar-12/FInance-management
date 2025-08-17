@@ -1,17 +1,23 @@
 import './index.css';
-import './assets/styles/header.css'
-import './assets/styles/register.css'
-import { Suspense, lazy } from 'react';
-import { Routes, Route, Navigate, Outlet } from "react-router-dom";
-import './assets/styles/user.css'
-import Loading from './components/utils/loading';
-import AuthService from './services/auth.service'
+import './assets/styles/header.css';
+import './assets/styles/register.css';
+import './assets/styles/loading.css';
+import { Suspense, lazy, useState, useEffect } from 'react';
+import { Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom';
+import './assets/styles/user.css';
+import FullPageLoading from './components/Loading';
+import AuthService from './services/auth.service';
 import { ThemeContext, useTheme } from './contexts/ThemeContext.js';
 import NewSavedTransaction from './pages/user/newSavedTransaction.js';
 import SavedTransactions from './pages/user/savedTransactions.js';
 import EditSavedTransaction from './pages/user/editSavedTransaction.js';
 
-const Welcome = lazy(() => import('./pages/welcome.js'))
+const Welcome = lazy(() => {
+  // Simulate loading time for the welcome page
+  return new Promise(resolve => {
+    setTimeout(() => resolve(import('./pages/welcome.js')), 1000);
+  });
+})
 const Login = lazy(() => import('./pages/auth/login/login.js'))
 const Register = lazy(() => import('./pages/auth/register/register.js'))
 const UserRegistrationVerfication = lazy(() => import('./pages/auth/register/userRegistrationVerification.js'))
@@ -35,8 +41,23 @@ const UserProfile = lazy(() => import('./pages/user/userProfile.js'))
 const UserStatistics = lazy(() => import('./pages/user/statistics.js'))
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
+  const location = useLocation();
+  const [isDarkMode, toggleTheme] = useTheme();
 
-    const [isDarkMode, toggleTheme] = useTheme()
+  useEffect(() => {
+    // Hide loading screen when component mounts
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 3500); // Match this with the loading animation duration
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Show loading screen only on initial load
+  if (isLoading && location.pathname === '/') {
+    return <FullPageLoading />;
+  }
 
     const ProtectedRoute = ({ isAllowed, redirectPath = '/unauthorized', children }) => {
         if (!isAllowed) {
@@ -47,7 +68,7 @@ function App() {
     }
 
     return (
-        <Suspense fallback={<LoadingSpinner />}>
+        <Suspense fallback={<div className="loading">Loading...</div>}>
             <ThemeContext.Provider value={{ isDarkMode, toggleTheme }}>
                 <RoutesWrapper isDarkMode={isDarkMode}>
                     <Routes>
@@ -82,6 +103,7 @@ function App() {
                         </Route>
 
                         <Route path="/" element={<Welcome />} />
+                        <Route path="/welcome" element={<Welcome />} />
                         <Route path="/auth/login" element={<Login />} />
                         <Route path="/auth/register" element={<Register />} />
                         <Route path="/unauthorized" element={<UnAuthorizedAccessPage />} />
@@ -102,14 +124,6 @@ function RoutesWrapper({ children, isDarkMode }) {
         </div>
     )
 
-}
-
-function LoadingSpinner() {
-    return (
-        <div style={{ width: '100%', height: '100vh' }}>
-            <Loading />
-        </div>
-    )
 }
 
 export default App;

@@ -15,46 +15,40 @@ const UserRegistrationVerfication = () => {
     const [isSending, setIsSending] = useState(false);
 
     const onSubmit = async (data) => {
-        setIsLoading(true)        
-        const response = await AuthService.verifyRegistrationVerificationCode(data.code).then(
-            (response) => {
-                console.log(response.data);
-                if (response.data.status === "SUCCESS") {
-                    console.log(response.data);
-                    navigate('/auth/success-registration')
-                    setResponseError("");
-                }else {
-                    setResponseError("Verification failed: Cannot resend email!")
-                }
-                
-            },
-            (error) => {
-                if (error.response) {
-                    const resMessage = error.response.data.response;
-                    setResponseError(resMessage);
-                    console.log(error);
-                }else {
-                    console.log(error);
-                    setResponseError("Verification failed: Cannot resend email!")
-                }
-            }
-          );
-        setIsLoading(false);
-    }
-
-    const resendCode = async() =>{
-        setIsSending(true)         
-        const response = await AuthService.resendRegistrationVerificationCode(email).then(
-            (response) => {
-                console.log(response.data.message);
+        setIsLoading(true);
+        try {
+            const response = await AuthService.verifyRegistrationVerificationCode(data.code);
+            if (response.data.status === "SUCCESS") {
+                navigate('/auth/success-registration');
                 setResponseError("");
-            },
-            (error) => {
-                setResponseError("cannot send email again!");
+            } else {
+                setResponseError("Verification failed: Cannot resend email!");
             }
-          );
-          setIsSending(false)  
-    }
+        } catch (error) {
+            if (error.response) {
+                const resMessage = error.response.data.response || "An error occurred during verification.";
+                setResponseError(resMessage);
+            } else {
+                setResponseError("Verification failed: Cannot resend email!");
+            }
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const resendCode = async () => {
+        try {
+            setIsSending(true);
+            const response = await AuthService.resendRegistrationVerificationCode(email);
+            console.log(response.data.message);
+            setResponseError("");
+        } catch (error) {
+            console.error("Error resending verification code:", error);
+            setResponseError("Cannot send email again!");
+        } finally {
+            setIsSending(false);
+        }
+    };
 
   return (
     <div className='container'>

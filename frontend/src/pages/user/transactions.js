@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import UserService from '../../services/userService';
 import AuthService from '../../services/auth.service';
 import Header from '../../components/utils/header';
@@ -26,32 +26,42 @@ function Transactions() {
         onNextClick, onPrevClick, setNoOfPages, setNoOfRecords, setSearchKey, getPageInfo
     } = usePagination('date')
 
-    const getTransactions = async () => {
-        await UserService.get_transactions(AuthService.getCurrentUser().email, pageNumber,
-            pageSize, searchKey, sortField, sortDirec, transactionType).then(
-                (response) => {
-                    if (response.data.status === "SUCCESS") {
-                        setUserTransactions(response.data.response.data)
-                        setNoOfPages(response.data.response.totalNoOfPages)
-                        setNoOfRecords(response.data.response.totalNoOfRecords)
-                        return
-                    }
-                },
-                (error) => {
-                    toast.error("Failed to fetch all transactions: Try again later!")
-                }
-            )
-        setIsFetching(false)
-    }
+    const getTransactions = useCallback(async () => {
+        try {
+            const response = await UserService.get_transactions(
+                AuthService.getCurrentUser().email, 
+                pageNumber,
+                pageSize, 
+                searchKey, 
+                sortField, 
+                sortDirec, 
+                transactionType
+            );
+            
+            if (response.data.status === "SUCCESS") {
+                setUserTransactions(response.data.response.data);
+                setNoOfPages(response.data.response.totalNoOfPages);
+                setNoOfRecords(response.data.response.totalNoOfRecords);
+            }
+        } catch (error) {
+            console.error("Error fetching transactions:", error);
+            toast.error("Failed to fetch all transactions: Try again later!");
+        } finally {
+            setIsFetching(false);
+        }
+    }, [pageNumber, pageSize, searchKey, sortField, sortDirec, transactionType, setNoOfPages, setNoOfRecords]);
 
     useEffect(() => {
         getTransactions()
-    }, [pageNumber, searchKey, transactionType, sortDirec, sortField])
+    }, [pageNumber, searchKey, transactionType, sortDirec, sortField, getTransactions])
 
     useEffect(() => {
-        location.state && toast.success(location.state.text)
-        location.state = null
-    }, [])
+        if (location.state?.text) {
+            toast.success(location.state.text);
+            // Clear the location state to prevent showing the message again on re-render
+            window.history.replaceState({}, document.title);
+        }
+    }, [location.state])
 
     return (
         <Container activeNavId={1}>

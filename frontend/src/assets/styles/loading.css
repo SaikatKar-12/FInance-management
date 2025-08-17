@@ -1,0 +1,131 @@
+/* Loading Animation */
+.loading-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #1a1a2e;
+  z-index: 9999;
+  transition: opacity 0.5s ease-out;
+}
+
+.loading-container.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.logo-animation {
+  text-align: center;
+  color: white;
+  transform: translateY(-20px);
+}
+
+.logo-spinner {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 20px;
+}
+
+.logo-circle {
+  width: 100%;
+  height: 100%;
+  border: 4px solid rgba(79, 70, 229, 0.2);
+  border-top: 4px solid #4f46e5;
+  border-radius: 50%;
+  animation: spin 1.5s linear infinite;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.logo-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #fff;
+  animation: pulse 2s infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+    border-top-color: #4f46e5;
+  }
+  50% {
+    border-top-color: #7c3aed;
+  }
+  100% {
+    transform: rotate(360deg);
+    border-top-color: #4f46e5;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.8;
+  }
+}
+
+.logo-animation h1 {
+  font-size: 2rem;
+  margin: 1rem 0 0.5rem;
+  background: linear-gradient(90deg, #4f46e5, #7c3aed);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: colorShift 4s infinite;
+}
+
+.developer-credit {
+  color: #a0aec0;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  opacity: 0.9;
+  animation: fadeIn 2s ease-in-out;
+}
+
+@keyframes colorShift {
+  0% {
+    background: linear-gradient(90deg, #4f46e5, #7c3aed);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  50% {
+    background: linear-gradient(90deg, #7c3aed, #4f46e5);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  100% {
+    background: linear-gradient(90deg, #4f46e5, #7c3aed);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 0.9;
+    transform: translateY(0);
+  }
+}
